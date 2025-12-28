@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import api from './api'
 import ArticleForm from './components/ArticleForm'
 import ArticleEditor from './components/ArticleEditor'
+import UpdateContent from './update/UpdateContent'
 
 export default function App() {
   const [articles, setArticles] = useState([])
@@ -38,6 +39,7 @@ export default function App() {
       {loading && <p>Loading articles…</p>}
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
       <ArticleEditor articles={articles} onChanged={fetchArticles} />
+      <UpdateContent articles={articles} onUpdated={fetchArticles} />
     </div>
   )
 }

@@ -19,6 +19,22 @@ async function scrapeBlogs() {
 
   const page = await browser.newPage();
   await page.goto(BLOG_LIST_URL, { waitUntil: "networkidle2" });
+  // try to navigate to the last page of the blog list (older posts)
+  try {
+    await page.waitForSelector('nav[role="navigation"], .pagination, .wp-block-query', { timeout: 2000 });
+    const lastHref = await page.evaluate(() => {
+      const relLast = document.querySelector('a[rel="last"]');
+      if (relLast) return relLast.href;
+      const pager = document.querySelectorAll('nav[role="navigation"] a, .pagination a, .wp-block-query a');
+      if (!pager || pager.length === 0) return null;
+      return pager[pager.length - 1].href;
+    });
+    if (lastHref) {
+      await page.goto(lastHref, { waitUntil: 'networkidle2' });
+    }
+  } catch (e) {
+    // ignore and continue on first page
+  }
 
   await page.waitForSelector("ul.wp-block-latest-posts__list");
 
@@ -42,8 +58,10 @@ async function scrapeBlogs() {
   });
 
   console.log(`🔎 Found ${blogs.length} blogs`);
+  // take up to 5 articles from this (last) page
+  const toSave = blogs.slice(0, 5);
 
-  for (const blog of blogs) {
+  for (const blog of toSave) {
     const articlePage = await browser.newPage();
 
     try {
@@ -84,7 +102,9 @@ async function scrapeBlogs() {
         title: blog.title,
         author: blog.author,
         url: blog.url,
-        content
+        originalContent: content,
+        content,
+        updatedContent: null
       });
 
       console.log(`✅ Saved: ${blog.title}`);
