@@ -1,45 +1,58 @@
-import React, { useEffect, useState } from 'react'
-import api from './api'
-import ArticleForm from './components/ArticleForm'
-import ArticleEditor from './components/ArticleEditor'
-import UpdateContent from './update/UpdateContent'
+// import { BrowserRouter, Routes, Route } from "react-router-dom"
+// import AppLayout from "./layout/AppLayout"
+
+// import Dashboard from "./pages/Dashboard"
+// import Articles from "./pages/Articles"
+// import CreateArticle from "./pages/CreateArticle"
+// import EditArticle from "./pages/EditArticle"
+// import UpdateFromGoogle from "./pages/UpdateFromGoogle"
+
+// export default function App() {
+//   return (
+//     <BrowserRouter>
+//       <Routes>
+//         <Route element={<AppLayout />}>
+//           <Route path="/" element={<Dashboard />} />
+//           <Route path="/articles" element={<Articles />} />
+//           <Route path="/articles/new" element={<CreateArticle />} />
+//           <Route path="/articles/:id/edit" element={<EditArticle />} />
+//           <Route path="/articles/update-google" element={<UpdateFromGoogle />} />
+//         </Route>
+//       </Routes>
+//     </BrowserRouter>
+//   )
+// }
+import { useState } from "react"
+import Sidebar from "./layout/Sidebar"
+import Dashboard from "./pages/Dashboard"
+import Articles from "./pages/Articles"
+import CreateArticle from "./pages/CreateArticle"
+import UpdateFromGoogle from "./pages/UpdateFromGoogle"
+import { PAGES } from "./constants/pages"
 
 export default function App() {
-  const [articles, setArticles] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [activePage, setActivePage] = useState(PAGES.DASHBOARD)
 
-  const fetchArticles = async () => {
-    setLoading(true)
-    setError('')
-    try {
-      const res = await api.get('/articles')
-      const data = res.data
-      if (!Array.isArray(data)) {
-        console.error('Unexpected /articles response:', data)
-        setError('Invalid response from server')
-        setArticles([])
-      } else {
-        setArticles(data)
-      }
-    } catch (err) {
-      console.error(err)
-      setError(err?.response?.data?.error || err.message || 'Failed to fetch')
-    } finally {
-      setLoading(false)
+  const renderPage = () => {
+    switch (activePage) {
+      case PAGES.ARTICLES:
+        return <Articles />
+      case PAGES.CREATE:
+        return <CreateArticle />
+      case PAGES.UPDATE_GOOGLE:
+        return <UpdateFromGoogle />
+      case PAGES.DASHBOARD:
+      default:
+        return <Dashboard />
     }
   }
 
-  useEffect(() => { fetchArticles() }, [])
-
   return (
-    <div className="container">
-      <h1>BeyondChats — Articles</h1>
-      <ArticleForm onCreated={fetchArticles} />
-      {loading && <p>Loading articles…</p>}
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-      <ArticleEditor articles={articles} onChanged={fetchArticles} />
-      <UpdateContent articles={articles} onUpdated={fetchArticles} />
+    <div className="flex h-screen bg-muted/40">
+      <Sidebar activePage={activePage} setActivePage={setActivePage} />
+      <main className="flex-1 p-6 overflow-y-auto">
+        {renderPage()}
+      </main>
     </div>
   )
 }
