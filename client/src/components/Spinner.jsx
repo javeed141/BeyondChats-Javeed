@@ -7,7 +7,7 @@ export default function Spinner({ label = "Loading...", size = 48 }) {
         className="animate-spin"
         style={{ width: size, height: size }}
       />
-      <span className="text-sm">{label}</span>
+      <span className= "text-sm">{label}</span>
     </div>
   )
 }
