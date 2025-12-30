@@ -3,17 +3,19 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+
+const articleRoutes = require("./routes/articleRoutes");
+
+const app = express();
+// app.use(cors());
+app.use(express.json());
 app.use(cors({
   origin: "https://beyond-chats-javeed.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
 
-const articleRoutes = require("./routes/articleRoutes");
-
-const app = express();
-app.use(cors());
-app.use(express.json());
+console.log(process.env.MONGO_URI)
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
