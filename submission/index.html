@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>BeyondChats — Submission Package</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:24px;background:#fff}
+    header{border-bottom:2px solid #eee;padding-bottom:12px;margin-bottom:18px}
+    h1{color:#2d3748}
+    section{margin-bottom:22px}
+    .diagram, .screenshot{border:1px solid #ddd;padding:8px;background:#fff;margin:8px 0}
+    img{max-width:100%;height:auto;display:block}
+    .meta{color:#444;font-size:14px}
+    @media print{body{margin:12px}}    
+  </style>
+</head>
+<body>
+  <header>
+    <h1>BeyondChats — Submission Package</h1>
+    <p class="meta">What this file contains: project summary, setup highlights, data flow diagrams, architecture notes, and screenshots — ready to print to PDF.</p>
+  </header>
+
+  <section>
+    <h2>Project Summary</h2>
+    <p>BeyondChats ingests articles, searches for external references via Google (SerpApi), scrapes reference pages (Puppeteer), and uses an LLM (Google Gemini) to rewrite and enhance article content. The backend is a Node/Express API and the frontend is a React + Vite app.</p>
+    <ul>
+      <li>Client: React + Vite</li>
+      <li>Server: Node.js, Express, Mongoose</li>
+      <li>Scraping: SerpApi + Puppeteer</li>
+      <li>LLM: Google Gemini (@google/genai) wrapper (optional)</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Quick Setup (high-level)</h2>
+    <p>See `README.md` for detailed steps. Essential env vars (server/.env):</p>
+    <pre>MONGO_URI=your_mongo_uri
+PORT=5000
+SERP_API=your_serpapi_key
+GEMINI_API_KEY=your_gemini_key (optional)
+GEMINI_MODEL=gemini-2.5-flash</pre>
+  </section>
+
+  <section>
+    <h2>Data Flow Diagrams</h2>
+    <div class="diagram">
+      <h3>System Context (Level 0)</h3>
+      <img src="../diagrams/level0.svg" alt="DFD Level 0" />
+    </div>
+    <div class="diagram">
+      <h3>Backend Data Flow</h3>
+      <img src="../diagrams/level1-backend.svg" alt="Backend Flow" />
+    </div>
+    <div class="diagram">
+      <h3>Frontend Data Flow</h3>
+      <img src="../diagrams/level1-frontend.svg" alt="Frontend Flow" />
+    </div>
+  </section>
+
+  <section>
+    <h2>Architecture Notes</h2>
+    <p>Key components and interactions:</p>
+    <ol>
+      <li>Client calls Express API endpoints under <code>/api/articles</code>.</li>
+      <li>The controller (articleController.js) handles CRUD and the `update-from-google` flow.</li>
+      <li>`update-from-google` flow: fetch article → search + scrape → rewrite via LLM → update DB (save updatedContent + references).</li>
+      <li>MongoDB stores `originalContent`, `updatedContent`, and `references` for each article.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Screenshots</h2>
+    <div class="screenshot">
+      <h3>Original Article View</h3>
+      <img src="../Screenshot%202025-12-30%20180927.png" alt="Original article screenshot" />
+    </div>
+    <div class="screenshot">
+      <h3>Updated (LLM-enhanced) Article View</h3>
+      <img src="../Screenshot%202025-12-30%20181029.png" alt="Updated article screenshot" />
+    </div>
+  </section>
+
+  <section>
+    <h2>Submission Checklist</h2>
+    <ul>
+      <li>Repository: client/ and server/ present ✓</li>
+      <li>`README.md` with setup, env and links ✓</li>
+      <li>Diagrams located in `diagrams/` ✓</li>
+      <li>Screenshots present in repo root ✓</li>
+      <li>Printable submission page: this file ✓</li>
+    </ul>
+    <p>To create a PDF: open this file in your browser and print to PDF (Ctrl/Cmd+P → Save as PDF).</p>
+  </section>
+
+  <footer>
+    <p class="meta">Generated for submission. Update any environment-specific notes in `docs/SUBMISSION.md` or `README.md` before final push.</p>
+  </footer>
+</body>
+</html>

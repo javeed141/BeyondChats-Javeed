@@ -9,6 +9,29 @@ Live / Demo
 
 ---
 
+## Data Flow Diagrams & Architecture
+
+- Data Flow Diagrams:
+
+	- System context (DFD Level 0):
+
+		![DFD Level 0](./diagrams/level0.svg)
+
+	- Backend data flow:
+
+		![Backend Flow](./diagrams/level1-backend.svg)
+
+	- Frontend data flow:
+
+		![Frontend Flow](./diagrams/level1-frontend.svg)
+
+- Screenshots (Original / Updated):
+
+	![Original Article](./Screenshot%202025-12-30%20180927.png)
+
+	![Updated Article](./Screenshot%202025-12-30%20181029.png)
+
+
 Tech Stack
 - Frontend: React, Vite
 - Backend: Node.js, Express
@@ -159,18 +182,7 @@ Notes:
 - 502 Bad Gateway: check your hosting logs (Render/Vercel) for crashes, missing environment variables, or Puppeteer startup errors.
 - LLM errors: if `@google/genai` is not installed or `GEMINI_API_KEY` is missing, the LLM wrapper will fail — either install/configure or fallback to no-LLM mode.
 
-## Contributing
-- Fork the repo, create a feature branch, and open a pull request.
-- Keep changes focused; run the client and server locally to verify behavior.
 
-## License & Contact
-- License: MIT (or add your chosen license)
-- Author / Maintainer: Javeed (update as appropriate)
 
----
-
-If you want, I can:
-- Commit this README to the repo, or
-- Add a one-page `docs/DEPLOYMENT.md` with step-by-step instructions for Render/Vercel (including puppeteer tips).
-
-Which would you prefer?
+Submission package
+- A printable submission page has been prepared at `submission/index.html`. Open it in your browser and use Print → Save as PDF to produce a single PDF for submission. The `diagrams/` folder and screenshots are embedded there.
