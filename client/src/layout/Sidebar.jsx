@@ -1,71 +1,63 @@
+import { NavLink } from "react-router-dom"
 import {
   LayoutDashboard,
   FileText,
   Plus,
   RefreshCcw,
+  Moon,
+  Sun,
 } from "lucide-react"
-import { PAGES } from "@/constants/pages"
-import clsx from "clsx"
+import { useTheme } from "@/context/ThemeContext"
 
-export default function Sidebar({ activePage, setActivePage }) {
+export default function Sidebar() {
+  const { theme, toggleTheme } = useTheme()
+
   return (
-    <aside className="w-64 border-r bg-background p-4">
-      <h1 className="mb-6 text-2xl font-bold">BeyondChats</h1>
+    <aside className="flex w-64 flex-col border-r border-sidebar-border bg-sidebar p-4">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center">
+          <FileText className="w-5 h-5 text-primary-foreground" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">BeyondChats</h1>
+          <p className="text-xs text-muted-foreground">Article Manager</p>
+        </div>
+      </div>
 
-      <nav className="space-y-1">
+      <nav className="flex-1 space-y-1">
+        <Item to="/" icon={<LayoutDashboard size={18} />} label="Dashboard" />
+        <Item to="/articles" icon={<FileText size={18} />} label="Articles" />
+        <Item to="/articles/new" icon={<Plus size={18} />} label="Create Article" />
         <Item
-          label="Dashboard"
-          icon={<LayoutDashboard size={18} />}
-          active={activePage === PAGES.DASHBOARD}
-          onClick={() => setActivePage(PAGES.DASHBOARD)}
-        />
-
-        <Item
-          label="Articles"
-          icon={<FileText size={18} />}
-          active={activePage === PAGES.ARTICLES}
-          onClick={() => setActivePage(PAGES.ARTICLES)}
-        />
-
-        <Item
-          label="Create Article"
-          icon={<Plus size={18} />}
-          active={activePage === PAGES.CREATE}
-          onClick={() => setActivePage(PAGES.CREATE)}
-        />
-
-        <Item
-          label="Update from Google"
+          to="/articles/update-google"
           icon={<RefreshCcw size={18} />}
-          active={activePage === PAGES.UPDATE_GOOGLE}
-          onClick={() => setActivePage(PAGES.UPDATE_GOOGLE)}
+          label="Update from Google"
         />
       </nav>
+
+      {/* Theme Toggle */}
+      <button
+        onClick={toggleTheme}
+        className="mt-4 sidebar-item w-full justify-center"
+        aria-label="Toggle theme"
+      >
+        {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+        <span className="sr-only">Toggle theme</span>
+      </button>
     </aside>
   )
 }
 
-function Item({ label, icon, active, onClick }) {
+function Item({ to, icon, label }) {
   return (
-    <button
-      onClick={onClick}
-      className={clsx(
-        "group relative flex w-full items-center gap-3 rounded-md px-3 py-2 text-left transition-all",
-        active
-          ? "bg-blue-500/10 text-blue-600 font-medium"
-          : "text-muted-foreground hover:bg-blue-500/5 hover:text-foreground"
-      )}
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        `sidebar-item ${isActive ? 'active' : ''}`
+      }
     >
-      {/* Left blue accent bar */}
-      <span
-        className={clsx(
-          "absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r",
-          active ? "bg-blue-600" : "bg-transparent"
-        )}
-      />
-
       {icon}
-      <span className="truncate">{label}</span>
-    </button>
+      <span className="font-medium">{label}</span>
+    </NavLink>
   )
 }
