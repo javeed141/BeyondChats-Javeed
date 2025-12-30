@@ -9,10 +9,21 @@ const articleRoutes = require("./routes/articleRoutes");
 const app = express();
 // app.use(cors());
 app.use(express.json());
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://beyondchats-javeed.onrender.com",
+  "https://beyond-chats-javeed.vercel.app",
+];
+
 app.use(cors({
-  origin: "https://beyond-chats-javeed.vercel.app",
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) return callback(null, true);
+    return callback(new Error("Not allowed by CORS"));
+  },
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
+  credentials: true,
 }));
 
 console.log(process.env.MONGO_URI)

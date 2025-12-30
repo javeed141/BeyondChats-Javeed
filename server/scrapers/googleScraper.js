@@ -95,10 +95,19 @@
 // module.exports = { searchGoogleAndScrape };
 const { getJson } = require("serpapi");
 const puppeteer = require("puppeteer");
-require("dotenv").config();
 
-const apiKey = process.env.SERP_API || "4ada421ed581f4ac7d619202cc13bc31b0ed72c56082cc63b59fce756b3805f8";
+// const {getJson} = require("serpapi")
+// require("dotenv").config();
+
+// dotenv.config()
+const path = require("path");
+require("dotenv").config({
+  path: path.resolve(__dirname, "../../server/.env"),
+});
+
+const apiKey= process.env.SERP_API
 console.log(apiKey)
+
 
 
 
