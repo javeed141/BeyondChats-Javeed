@@ -1,4 +1,10 @@
 {
+  "dependencies": {
+    "puppeteer": "^22.12.1"
+  },
+  "scripts": {
+    "postinstall": "npx puppeteer browsers install chrome"
+  },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18"
   }
