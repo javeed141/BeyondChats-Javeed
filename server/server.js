@@ -2,6 +2,13 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+import cors from "cors";
+
+app.use(cors({
+  origin: "https://beyond-chats-javeed.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 
 const articleRoutes = require("./routes/articleRoutes");
 
