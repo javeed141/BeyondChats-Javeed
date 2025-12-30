@@ -156,14 +156,14 @@ export default function Articles() {
         </table>
       </div>
 
-      <Dialog open={!!selectedArticle} onOpenChange={(open) => !open && closeViewer()}>
+     <Dialog open={!!selectedArticle} onOpenChange={(open) => !open && closeViewer()}>
   <DialogContent
     className="
       bg-white
       text-black
-      max-w-6xl
-      w-[95vw]
-      max-h-[85vh]
+      max-w-[95vw]
+      w-full
+      max-h-[90vh]
       overflow-hidden
       rounded-xl
       shadow-2xl
@@ -181,24 +181,14 @@ export default function Articles() {
     </DialogHeader>
 
     {/* CONTENT */}
-    <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="mt-6 grid grid-cols-1 xl:grid-cols-2 gap-8">
       
       {/* ORIGINAL CONTENT */}
-      <div
-        className="
-          p-5
-          rounded-lg
-          border
-          border-gray-200
-          bg-gray-50
-          max-h-[60vh]
-          overflow-auto
-        "
-      >
-        <h4 className="mb-3 text-lg font-semibold text-gray-900">
+      <div className="p-6 rounded-lg border border-gray-200 bg-gray-50 max-h-[65vh] overflow-auto">
+        <h4 className="mb-4 text-lg font-semibold text-gray-900">
           Original Content
         </h4>
-        <div className="text-sm leading-relaxed whitespace-pre-wrap text-gray-700">
+        <div className="text-base leading-relaxed whitespace-pre-wrap text-gray-800">
           {selectedArticle?.originalContent ||
             selectedArticle?.content ||
             "No original content available."}
@@ -206,21 +196,11 @@ export default function Articles() {
       </div>
 
       {/* UPDATED CONTENT */}
-      <div
-        className="
-          p-5
-          rounded-lg
-          border
-          border-gray-200
-          bg-white
-          max-h-[60vh]
-          overflow-auto
-        "
-      >
-        <h4 className="mb-3 text-lg font-semibold text-gray-900">
+      <div className="p-6 rounded-lg border border-gray-200 bg-white max-h-[65vh] overflow-auto">
+        <h4 className="mb-4 text-lg font-semibold text-gray-900">
           Updated Content
         </h4>
-        <div className="text-sm leading-relaxed whitespace-pre-wrap text-gray-700">
+        <div className="text-base leading-relaxed whitespace-pre-wrap text-gray-800">
           {selectedArticle?.updatedContent || "No updated content available."}
         </div>
       </div>
@@ -228,16 +208,7 @@ export default function Articles() {
 
     {/* FOOTER */}
     <DialogFooter className="border-t border-gray-200 pt-4 mt-6 flex justify-end">
-      <DialogClose
-        className="
-          px-4 py-2
-          rounded-md
-          bg-gray-900
-          text-white
-          hover:bg-gray-800
-          transition
-        "
-      >
+      <DialogClose className="px-5 py-2 rounded-md bg-gray-900 text-white hover:bg-gray-800 transition">
         Close
       </DialogClose>
     </DialogFooter>
