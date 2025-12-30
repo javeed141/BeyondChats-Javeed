@@ -1,13 +1,25 @@
-import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: "AIzaSyBl99Q8TTPMc3_V6YvWrzOxX6y4Rx1pErg" });
+const {getJson} = require("serpapi")
+require("dotenv").config();
 
-async function main() {
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: "Explain how AI works in a few words",
-  });
-  console.log(response.text);
+// dotenv.config()
+
+const apiKey= process.env.SERP_API
+
+// console.log(apiKey)
+
+
+getJson({
+  api_key:apiKey,
+  q:"Java Functions",
+  engine:"google",
+
+},(json)=>{
+  const data= json.organic_results ; 
+  data.forEach((res,index)=>{
+    console.log(res.link);
+  })
+
 }
 
-main();
+)

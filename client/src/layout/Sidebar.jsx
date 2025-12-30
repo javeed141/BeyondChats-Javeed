@@ -25,13 +25,14 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 space-y-1">
-        <Item to="/" icon={<LayoutDashboard size={18} />} label="Dashboard" />
-        <Item to="/articles" icon={<FileText size={18} />} label="Articles" />
-        <Item to="/articles/new" icon={<Plus size={18} />} label="Create Article" />
+        <Item to="/" icon={<LayoutDashboard size={18} />} label="Dashboard" end />
+        <Item to="/articles" icon={<FileText size={18} />} label="Articles" end />
+        <Item to="/articles/new" icon={<Plus size={18} />} label="Create Article" end />
         <Item
           to="/articles/update-google"
           icon={<RefreshCcw size={18} />}
           label="Update from Google"
+          end
         />
       </nav>
 
@@ -48,13 +49,12 @@ export default function Sidebar() {
   )
 }
 
-function Item({ to, icon, label }) {
+function Item({ to, icon, label, end = false }) {
   return (
     <NavLink
       to={to}
-      className={({ isActive }) =>
-        `sidebar-item ${isActive ? 'active' : ''}`
-      }
+      end={end}
+      className={({ isActive }) => `sidebar-item ${isActive ? 'active' : ''}`}
     >
       {icon}
       <span className="font-medium">{label}</span>

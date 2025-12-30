@@ -1,67 +1,96 @@
-const axios = require("axios");
+const { getJson } = require("serpapi");
+const puppeteer = require("puppeteer");
 
-/**
- * Uses DuckDuckGo public API (NO scraping, NO blocking)
- * Always returns URLs
- */
-async function searchGoogleAndScrape(title, excludeDomain, maxResults = 3) {
-  const query = encodeURIComponent(title);
-  const url = `https://api.duckduckgo.com/?q=${query}&format=json&no_redirect=1&no_html=1`;
+async function searchGoogleAndScrape(title, excludeDomain) {
+  const apiKey = process.env.SERP_API;
 
-  try {
-    const res = await axios.get(url);
-    const data = res.data;
+  return new Promise((resolve, reject) => {
+    getJson(
+      {
+        api_key: apiKey,
+        engine: "google",
+        q: title,
+        num: 2
+      },
+      async (json) => {
+        try {
+          console.log("SERP RAW RESPONSE:", json);
+console.log("Organic results:", json.organic_results);
 
-    const results = [];
+          const results = json.organic_results || [];
+          const links = [];
 
-    // 1️⃣ Related Topics
-    if (Array.isArray(data.RelatedTopics)) {
-      for (const item of data.RelatedTopics) {
-        if (item.FirstURL) {
-          try {
-            const u = new URL(item.FirstURL);
-            if (excludeDomain && u.hostname.includes(excludeDomain)) continue;
+          for (const r of results) {
+            if (!r.link) continue;
+            try {
+              const u = new URL(r.link);
+              if (excludeDomain && u.hostname.includes(excludeDomain)) continue;
+              links.push(r.link);
+            } catch {}
+            if (links.length === 2) break;
+          }
 
-            results.push({
-              title: item.Text || "",
-              url: item.FirstURL,
-              content: "",
-            });
-          } catch {}
+          if (links.length === 0) {
+            return resolve([]);
+          }
+
+          // 🔍 Scrape content from links
+          const browser = await puppeteer.launch({
+            headless: true,
+            args: ["--no-sandbox", "--disable-setuid-sandbox"]
+          });
+
+          const scraped = [];
+
+          for (const url of links) {
+            const page = await browser.newPage();
+            try {
+              await page.goto(url, {
+                waitUntil: "domcontentloaded",
+                timeout: 30000
+              });
+
+              const data = await page.evaluate(() => {
+                const container =
+                  document.querySelector("article") ||
+                  document.querySelector("main") ||
+                  document.body;
+
+                const text = Array.from(
+                  container.querySelectorAll("p, h1, h2, h3")
+                )
+                  .map(e => e.innerText.trim())
+                  .filter(Boolean)
+                  .join("\n\n");
+
+                return {
+                  title: document.title,
+                  content: text
+                };
+              });
+
+            scraped.push({
+  title: data.title || "",
+  url,
+  content: data.content || ""
+});
+
+            } catch (err) {
+              console.error("Scrape failed:", url);
+            } finally {
+              await page.close();
+            }
+          }
+
+          await browser.close();
+          resolve(scraped);
+
+        } catch (err) {
+          reject(err);
         }
-        if (results.length >= maxResults) break;
       }
-    }
-
-    // 2️⃣ Fallback: Wikipedia abstract
-    if (results.length === 0 && data.AbstractURL) {
-      results.push({
-        title: data.Heading || title,
-        url: data.AbstractURL,
-        content: "",
-      });
-    }
-
-    // 3️⃣ LAST RESORT (guaranteed non-empty for submission)
-    if (results.length === 0) {
-      results.push(
-        { title: "Medium", url: "https://medium.com", content: "" },
-        { title: "Towards Data Science", url: "https://towardsdatascience.com", content: "" }
-      );
-    }
-
-    console.log("✅ Reference links:", results.map(r => r.url));
-    return results.slice(0, maxResults);
-
-  } catch (err) {
-    console.error("DuckDuckGo API failed:", err.message);
-
-    // Absolute fallback
-    return [
-      { title: "Medium", url: "https://medium.com", content: "" },
-      { title: "Towards Data Science", url: "https://towardsdatascience.com", content: "" }
-    ];
-  }
+    );
+  });
 }
 
 module.exports = { searchGoogleAndScrape };
