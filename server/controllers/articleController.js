@@ -167,14 +167,15 @@ exports.updateFromGoogle = async (req, res) => {
       return res.status(404).json({ error: "Article not found" });
     }
 
-    let excludeDomain = null;
-    try {
-      excludeDomain = new URL(article.url).hostname;
-    } catch {}
+    // let excludeDomain = null;
+    // try {
+    //   excludeDomain = new URL(article.url).hostname;
+    // } catch(err) {
+    //   console.log("this is javeed error")
+    // }
 
     const references = await searchGoogleAndScrape(
       article.title,
-      excludeDomain
     );
 
     if (!references || references.length === 0) {
