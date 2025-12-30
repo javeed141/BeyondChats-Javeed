@@ -5,12 +5,29 @@ const { rewriteArticle } = require("../utils/llm");
 // CREATE
 exports.createArticle = async (req, res) => {
   try {
-    const article = await Article.create(req.body);
+    const { title, author, url, content } = req.body;
+
+    const article = await Article.create({
+      title,
+      author,
+      url,
+
+      // ✅ store initial content properly
+      content: content || "",
+      originalContent: content || "",
+
+      // ❌ do NOT set updatedContent on creation
+      updatedContent: undefined,
+      references: []
+    });
+
     res.status(201).json(article);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Failed to create article" });
   }
 };
+
 
 // READ ALL
 exports.getArticles = async (req, res) => {
@@ -58,6 +75,91 @@ exports.deleteArticle = async (req, res) => {
 // const { searchGoogleAndScrape } = require("../scrapers/googleScraper");
 // const { rewriteArticle } = require("../utils/llm");
 
+// exports.updateFromGoogle = async (req, res) => {
+//   try {
+//     const article = await Article.findById(req.params.id);
+//     if (!article) {
+//       return res.status(404).json({ error: "Article not found" });
+//     }
+
+//     // Exclude original article domain
+//     let excludeDomain = null;
+//     try {
+//       excludeDomain = new URL(article.url).hostname;
+//     } catch {}
+
+//     // 1️⃣ Google search + scrape (SerpAPI)
+//     const references = await searchGoogleAndScrape(
+//       article.title,
+//       excludeDomain
+//     );
+
+//     // 🟡 Safe fallback if no references found
+//     if (!references || references.length === 0) {
+//       const updated = await Article.findByIdAndUpdate(
+//         article._id,
+//         { references: [] },
+//         { new: true }
+//       );
+
+//       return res.json({
+//         updated,
+//         references: [],
+//         message: "No external references available"
+//       });
+//     }
+
+//     // 2️⃣ Prepare original content
+//     const originalContent =
+//       article.originalContent || article.content || "";
+
+//     // 3️⃣ Send to LLM
+//     const rewritten = await rewriteArticle(
+//       {
+//         title: article.title,
+//         originalContent
+//       },
+//       references
+//     );
+
+//     // 4️⃣ Normalize LLM output (ARRAY → STRING)
+//     let finalContent = "";
+
+//     if (Array.isArray(rewritten?.content)) {
+//       finalContent = rewritten.content.join("\n\n");
+//     } else if (typeof rewritten?.content === "string") {
+//       finalContent = rewritten.content;
+//     } else if (typeof rewritten === "string") {
+//       finalContent = rewritten;
+//     } else {
+//       finalContent = article.content || "";
+//     }
+
+//     // 5️⃣ Update DB (IMPORTANT PART)
+//     const updated = await Article.findByIdAndUpdate(
+//       article._id,
+//       {
+//         content: finalContent,           // for UI
+//         updatedContent: finalContent,    // ✅ REQUIRED
+//         originalContent,
+//         references: references.map(r => r.url)
+//       },
+//       { new: true }
+//     );
+
+//     return res.json({
+//       updated,
+//       references: references.map(r => r.url)
+//     });
+
+//   } catch (err) {
+//     console.error("UpdateFromGoogle error:", err);
+//     return res.status(500).json({
+//       error: "Update from Google failed"
+//     });
+//   }
+// };
+
 exports.updateFromGoogle = async (req, res) => {
   try {
     const article = await Article.findById(req.params.id);
@@ -65,81 +167,53 @@ exports.updateFromGoogle = async (req, res) => {
       return res.status(404).json({ error: "Article not found" });
     }
 
-    // Exclude original article domain
     let excludeDomain = null;
     try {
       excludeDomain = new URL(article.url).hostname;
     } catch {}
 
-    // 1️⃣ Google search + scrape (SerpAPI)
     const references = await searchGoogleAndScrape(
       article.title,
       excludeDomain
     );
 
-    // 🟡 Safe fallback if no references found
     if (!references || references.length === 0) {
-      const updated = await Article.findByIdAndUpdate(
-        article._id,
-        { references: [] },
-        { new: true }
-      );
-
-      return res.json({
-        updated,
-        references: [],
-        message: "No external references available"
-      });
+      return res.json({ updated: article, references: [] });
     }
 
-    // 2️⃣ Prepare original content
     const originalContent =
       article.originalContent || article.content || "";
 
-    // 3️⃣ Send to LLM
     const rewritten = await rewriteArticle(
-      {
-        title: article.title,
-        originalContent
-      },
+      { title: article.title, originalContent },
       references
     );
 
-    // 4️⃣ Normalize LLM output (ARRAY → STRING)
-    let finalContent = "";
+    // 🔥 THIS IS THE ONLY EXTRACTION YOU EVER DO
+    const updatedText = String(
+      Array.isArray(rewritten?.content)
+        ? rewritten.content.join("\n\n")
+        : rewritten?.content || ""
+    );
 
-    if (Array.isArray(rewritten?.content)) {
-      finalContent = rewritten.content.join("\n\n");
-    } else if (typeof rewritten?.content === "string") {
-      finalContent = rewritten.content;
-    } else if (typeof rewritten === "string") {
-      finalContent = rewritten;
-    } else {
-      finalContent = article.content || "";
-    }
-
-    // 5️⃣ Update DB (IMPORTANT PART)
+    // 🔥 STORE STRING ONLY — NO JSON POSSIBLE
     const updated = await Article.findByIdAndUpdate(
       article._id,
       {
-        content: finalContent,           // for UI
-        updatedContent: finalContent,    // ✅ REQUIRED
-        originalContent,
+        updatedContent: updatedText,
         references: references.map(r => r.url)
       },
       { new: true }
     );
 
-    return res.json({
-      updated,
-      references: references.map(r => r.url)
-    });
-
+    return res.json({ updated });
   } catch (err) {
-    console.error("UpdateFromGoogle error:", err);
-    return res.status(500).json({
-      error: "Update from Google failed"
-    });
+    console.error(err);
+    return res.status(500).json({ error: "Update from Google failed" });
   }
 };
+
+
+
+
 

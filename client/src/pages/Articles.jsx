@@ -157,33 +157,93 @@ export default function Articles() {
       </div>
 
       <Dialog open={!!selectedArticle} onOpenChange={(open) => !open && closeViewer()}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden">
-          <DialogHeader>
-            <DialogTitle>{selectedArticle?.title}</DialogTitle>
-            <DialogDescription>{selectedArticle?.author || 'Unknown author'}</DialogDescription>
-          </DialogHeader>
+  <DialogContent
+    className="
+      bg-white
+      text-black
+      max-w-6xl
+      w-[95vw]
+      max-h-[85vh]
+      overflow-hidden
+      rounded-xl
+      shadow-2xl
+      border border-gray-200
+    "
+  >
+    {/* HEADER */}
+    <DialogHeader className="border-b border-gray-200 pb-4">
+      <DialogTitle className="text-2xl font-bold text-gray-900">
+        {selectedArticle?.title}
+      </DialogTitle>
+      <DialogDescription className="text-sm text-gray-600">
+        {selectedArticle?.author || "Unknown author"}
+      </DialogDescription>
+    </DialogHeader>
 
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 rounded-md border bg-card text-foreground max-h-[60vh] overflow-auto">
-              <h4 className="font-medium mb-2">Original Content</h4>
-              <div className="text-sm text-muted-foreground whitespace-pre-wrap">
-                {selectedArticle?.originalContent || selectedArticle?.content || 'No original content available.'}
-              </div>
-            </div>
+    {/* CONTENT */}
+    <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      
+      {/* ORIGINAL CONTENT */}
+      <div
+        className="
+          p-5
+          rounded-lg
+          border
+          border-gray-200
+          bg-gray-50
+          max-h-[60vh]
+          overflow-auto
+        "
+      >
+        <h4 className="mb-3 text-lg font-semibold text-gray-900">
+          Original Content
+        </h4>
+        <div className="text-sm leading-relaxed whitespace-pre-wrap text-gray-700">
+          {selectedArticle?.originalContent ||
+            selectedArticle?.content ||
+            "No original content available."}
+        </div>
+      </div>
 
-            <div className="p-4 rounded-md border bg-card text-foreground max-h-[60vh] overflow-auto">
-              <h4 className="font-medium mb-2">Updated Content</h4>
-              <div className="text-sm text-muted-foreground whitespace-pre-wrap">
-                {selectedArticle?.updatedContent || 'No updated content available.'}
-              </div>
-            </div>
-          </div>
+      {/* UPDATED CONTENT */}
+      <div
+        className="
+          p-5
+          rounded-lg
+          border
+          border-gray-200
+          bg-white
+          max-h-[60vh]
+          overflow-auto
+        "
+      >
+        <h4 className="mb-3 text-lg font-semibold text-gray-900">
+          Updated Content
+        </h4>
+        <div className="text-sm leading-relaxed whitespace-pre-wrap text-gray-700">
+          {selectedArticle?.updatedContent || "No updated content available."}
+        </div>
+      </div>
+    </div>
 
-          <DialogFooter>
-            <DialogClose className="text-sm text-muted-foreground">Close</DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+    {/* FOOTER */}
+    <DialogFooter className="border-t border-gray-200 pt-4 mt-6 flex justify-end">
+      <DialogClose
+        className="
+          px-4 py-2
+          rounded-md
+          bg-gray-900
+          text-white
+          hover:bg-gray-800
+          transition
+        "
+      >
+        Close
+      </DialogClose>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
     </div>
   )
 }
