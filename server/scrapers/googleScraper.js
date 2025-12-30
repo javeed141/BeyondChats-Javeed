@@ -95,9 +95,14 @@
 // module.exports = { searchGoogleAndScrape };
 const { getJson } = require("serpapi");
 const puppeteer = require("puppeteer");
+require("dotenv").config();
+
+const apiKey = process.env.SERP_API || "4ada421ed581f4ac7d619202cc13bc31b0ed72c56082cc63b59fce756b3805f8";
+console.log(apiKey)
+
+
 
 async function searchGoogleAndScrape(title) {
-  const apiKey = process.env.SERP_API;
 
   return new Promise((resolve, reject) => {
     getJson(
