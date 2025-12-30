@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="700" viewBox="0 0 1000 700">
+  <style>
+    .box { fill:#ffffff;stroke:#48bb78;stroke-width:2; rx:8 }
+    .title { font:18px Arial; fill:#2d3748; font-weight:700 }
+    .label { font:13px Arial; fill:#2d3748 }
+    .arrow { stroke:#2d3748; stroke-width:2; fill:none; marker-end:url(#arrowhead) }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2d3748" />
+    </marker>
+  </defs>
+  <text class="title" x="30" y="36">BeyondChats — Frontend Data Flow</text>
+
+  <!-- Browser / UI -->
+  <rect class="box" x="40" y="80" width="360" height="120" />
+  <text class="label" x="120" y="120">Client (React)</text>
+  <text class="label" x="80" y="140">Components: Articles, UpdateFromGoogle, CreateArticle</text>
+
+  <!-- API calls -->
+  <rect class="box" x="460" y="80" width="360" height="120" />
+  <text class="label" x="560" y="120">API / Proxy</text>
+  <text class="label" x="520" y="140">Calls: GET /api/articles, POST /api/articles/:id/update-from-google</text>
+
+  <!-- State/UX -->
+  <rect class="box" x="40" y="240" width="780" height="120" />
+  <text class="label" x="100" y="280">Client State & UI</text>
+  <text class="label" x="100" y="300">- Displays article.content or updatedContent</text>
+  <text class="label" x="100" y="320">- Shows spinner, confirm dialogs, and error messages</text>
+
+  <path class="arrow" d="M400 140 L460 140" />
+  <path class="arrow" d="M620 200 L620 240" />
+
+  <text class="label" x="30" y="620">Notes:</text>
+  <text class="label" x="30" y="640">- Use Vite proxy in dev to avoid CORS (or ensure server CORS includes localhost)</text>
+  <text class="label" x="30" y="660">- UI reads `updatedContent` (if present) to show LLM-enhanced article</text>
+</svg>

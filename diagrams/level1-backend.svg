@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <style>
+    .box { fill:#ffffff;stroke:#805ad5;stroke-width:2; rx:8 }
+    .title { font:18px Arial; fill:#2d3748; font-weight:700 }
+    .label { font:13px Arial; fill:#2d3748 }
+    .arrow { stroke:#2d3748; stroke-width:2; fill:none; marker-end:url(#arrowhead) }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2d3748" />
+    </marker>
+  </defs>
+  <text class="title" x="30" y="36">BeyondChats — Backend Data Flow (Level 1)</text>
+
+  <!-- API -->
+  <rect class="box" x="60" y="80" width="260" height="100" />
+  <text class="label" x="140" y="130">Express API</text>
+  <text class="label" x="140" y="150">/api/articles</text>
+
+  <!-- Controller -->
+  <rect class="box" x="380" y="80" width="260" height="100" />
+  <text class="label" x="450" y="130">Controllers</text>
+  <text class="label" x="420" y="150">articleController.js</text>
+
+  <!-- Scraper & LLM -->
+  <rect class="box" x="700" y="40" width="360" height="140" />
+  <text class="label" x="760" y="80">Scrapers</text>
+  <text class="label" x="760" y="100">googleScraper.js (SerpApi + Puppeteer)</text>
+  <text class="label" x="760" y="120">LLM wrapper: utils/llm.js (@google/genai)</text>
+
+  <!-- Database -->
+  <rect class="box" x="380" y="240" width="260" height="100" />
+  <text class="label" x="430" y="290">MongoDB</text>
+  <text class="label" x="420" y="310">models/Article.js</text>
+
+  <!-- arrows -->
+  <path class="arrow" d="M320 130 L380 130" />
+  <path class="arrow" d="M640 130 L700 130" />
+  <path class="arrow" d="M700 180 L700 240" />
+  <path class="arrow" d="M520 180 L520 240" />
+
+  <!-- Notes -->
+  <text class="label" x="30" y="740">Sequence for `update-from-google`:</text>
+  <text class="label" x="30" y="760">1) Controller fetches article → 2) Calls `searchGoogleAndScrape` → 3) Scraper returns references → 4) LLM rewrites → 5) DB updated (updatedContent + references)</text>
+</svg>

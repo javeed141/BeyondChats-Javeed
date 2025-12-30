@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600">
+  <style>
+    .box { fill:#ffffff;stroke:#2b6cb0;stroke-width:2; rx:8; }
+    .title { font: 18px Arial; fill:#1a202c; font-weight:700 }
+    .label { font:14px Arial; fill:#1a202c }
+    .arrow { stroke:#2d3748; stroke-width:2; fill:none; marker-end:url(#arrowhead) }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2d3748" />
+    </marker>
+  </defs>
+
+  <text class="title" x="30" y="40">BeyondChats — Data Flow Diagram (Level 0)</text>
+
+  <!-- User -->
+  <rect class="box" x="50" y="100" width="180" height="80" />
+  <text class="label" x="95" y="150">External User</text>
+
+  <!-- Client -->
+  <rect class="box" x="320" y="100" width="220" height="80" />
+  <text class="label" x="390" y="150">Client (React)</text>
+
+  <!-- API -->
+  <rect class="box" x="630" y="100" width="220" height="80" />
+  <text class="label" x="680" y="130">API (Express)</text>
+  <text class="label" x="680" y="150">/api/articles</text>
+
+  <!-- DB -->
+  <rect class="box" x="630" y="260" width="220" height="80" />
+  <text class="label" x="690" y="305">MongoDB (Mongoose)</text>
+
+  <!-- Arrows -->
+  <path class="arrow" d="M230 140 L320 140" />
+  <path class="arrow" d="M540 140 L630 140" />
+  <path class="arrow" d="M740 180 L740 260" />
+
+  <!-- Notes -->
+  <text class="label" x="30" y="520">Flow: User → Client → API → Database</text>
+  <text class="label" x="30" y="540">Special endpoint: POST /api/articles/:id/update-from-google</text>
+</svg>
