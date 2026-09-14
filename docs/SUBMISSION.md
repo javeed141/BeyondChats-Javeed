@@ -12,7 +12,7 @@ Evaluation Criteria (as requested)
 
 What you must provide
 1. Public git repository containing all source code (client/ and server/).
-2. A clear `README.md` with:
+2. A clear `README.md` with: 
    - Local setup instructions
    - Environment variables
    - Running and deployment instructions

@@ -20,7 +20,7 @@ exports.createArticle = async (req, res) => {
       updatedContent: undefined,
       references: []
     });
-
+ 
     res.status(201).json(article);
   } catch (err) {
     console.error(err);
