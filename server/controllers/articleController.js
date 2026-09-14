@@ -3,7 +3,7 @@ const { searchGoogleAndScrape } = require("../scrapers/googleScraper");
 const { rewriteArticle } = require("../utils/llm");
 
 // CREATE
-exports.createArticle = async (req, res) => {
+exports.createArticle = async (req, res) => { 
   try {
     const { title, author, url, content } = req.body;
 
