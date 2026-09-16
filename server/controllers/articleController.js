@@ -11,7 +11,7 @@ exports.createArticle = async (req, res) => {
       title,
       author,
       url,
-
+ 
       // ✅ store initial content properly
       content: content || "",
       originalContent: content || "",
