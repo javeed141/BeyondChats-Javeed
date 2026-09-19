@@ -3,7 +3,7 @@ Submission Checklist — BeyondChats
 Overview
 This document summarizes what to include when submitting your project and points to the prepared files in this repository to make review easier.
 
-Evaluation Criteria (as requested)
+Evaluation Criteria (as requested)  
 - Completeness — 40%
 - ReadMe & setup docs — 25%
 - UI/UX — 15%
