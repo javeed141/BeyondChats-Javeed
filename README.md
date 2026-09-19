@@ -1,9 +1,9 @@
 
 # BeyondChats
-
+ 
 A content-enhancing platform that stores articles, finds authoritative references via Google, and rewrites articles using an LLM to improve clarity, structure, and references.
-
-Live / Demo
+helleihp
+Live / Demo 
 - Frontend (deployed): https://beyond-chats-javeed.vercel.app/
 - API (deployed): https://beyondchats-javeed.onrender.com/
 
@@ -186,3 +186,4 @@ Notes:
 
 Submission package
 - A printable submission page has been prepared at `submission/index.html`. Open it in your browser and use Print → Save as PDF to produce a single PDF for submission. The `diagrams/` folder and screenshots are embedded there.
+s
