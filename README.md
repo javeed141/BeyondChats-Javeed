@@ -5,7 +5,7 @@ A content-enhancing platform that stores articles, finds authoritative reference
 helleihp 
 Live / Demo 
 - Frontend (deployed): https://beyond-chats-javeed.vercel.app/ 
-- API (deployed): https://beyondchats-javeed.onrender.com/
+- API (deployed): https://beyondchats-javeed.onrender.com/ 
  
 ---
  
