@@ -4,7 +4,7 @@
 A content-enhancing platform that stores articles, finds authoritative references via Google, and rewrites articles using an LLM to improve clarity, structure, and references.
 helleihp 
 Live / Demo 
-- Frontend (deployed): https://beyond-chats-javeed.vercel.app/
+- Frontend (deployed): https://beyond-chats-javeed.vercel.app/ 
 - API (deployed): https://beyondchats-javeed.onrender.com/
  
 ---
