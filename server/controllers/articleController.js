@@ -3,7 +3,7 @@ const { searchGoogleAndScrape } = require("../scrapers/googleScraper");
 const { rewriteArticle } = require("../utils/llm");
 
 // CREATE
-exports.createArticle = async (req, res) => { 
+exports.createArticle = async (req, res) => {
   try {
     const { title, author, url, content } = req.body;
 
@@ -11,7 +11,7 @@ exports.createArticle = async (req, res) => {
       title,
       author,
       url,
- 
+
       // ✅ store initial content properly
       content: content || "",
       originalContent: content || "",
@@ -20,7 +20,7 @@ exports.createArticle = async (req, res) => {
       updatedContent: undefined,
       references: []
     });
- 
+
     res.status(201).json(article);
   } catch (err) {
     console.error(err);
